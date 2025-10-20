@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather API - Admin Dashboard</title>
+    <link rel="stylesheet" href="../themes.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+  </head>
+
+  <body>
+    <header class="header">
+      <h1>🌦️ Weather API Admin Dashboard</h1>
+      <div class="header-actions">
+        <div class="theme-controls">
+          <div class="theme-selector" id="theme-selector-container">
+            <i class="fas fa-palette" aria-hidden="true"></i>
+            <select id="theme-selector" aria-label="Select theme">
+              <!-- Options populated by JavaScript -->
+            </select>
+          </div>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+            <span class="toggle-icon moon-icon">🌙</span>
+            <span class="toggle-icon sun-icon">☀️</span>
+          </button>
+          <button class="customize-btn" id="customize-theme-btn" aria-label="Customize theme">
+            <i class="fas fa-sliders-h" aria-hidden="true"></i>
+          </button>
+        </div>
+        <button class="refresh-btn" onclick="refreshDashboard()">
+          🔄 Refresh
+        </button>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Overview Cards -->
+      <div class="dashboard-grid">
+        <div class="card health-status">
+          <h3>System Health</h3>
+          <div id="health-metrics">
+            <div class="loading">Loading health data...</div>
+          </div>
+        </div>
+
+        <div class="card performance-card">
+          <h3>Performance</h3>
+          <div id="performance-metrics">
+            <div class="loading">Loading performance data...</div>
+          </div>
+        </div>
+
+        <div class="card error-card">
+          <h3>Errors (24h)</h3>
+          <div id="error-metrics">
+            <div class="loading">Loading error data...</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Configuration</h3>
+          <div id="config-info">
+            <div class="loading">Loading configuration...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Tabs -->
+      <div class="tabs">
+        <div class="tab-buttons">
+          <button class="tab-button active" onclick="showTab('logs')">
+            📝 Logs
+          </button>
+          <button class="tab-button" onclick="showTab('errors')">
+            🚨 Error Details
+          </button>
+          <button class="tab-button" onclick="showTab('metrics')">
+            📊 Raw Metrics
+          </button>
+          <button class="tab-button" onclick="showTab('actions')">
+            ⚙️ Actions
+          </button>
+        </div>
+
+        <div class="tab-content">
+          <div id="logs-tab" class="tab-pane active">
+            <h4>Recent Logs</h4>
+            <div class="actions">
+              <select id="log-level" onchange="loadLogs()">
+                <option value="all">All Levels</option>
+                <option value="error">Error</option>
+                <option value="warn">Warning</option>
+                <option value="info" selected>Info</option>
+                <option value="debug">Debug</option>
+              </select>
+              <button class="btn" onclick="loadLogs()">Refresh Logs</button>
+            </div>
+            <div id="logs-content">
+              <div class="loading">Loading logs...</div>
+            </div>
+          </div>
+
+          <div id="errors-tab" class="tab-pane">
+            <h4>Error Analysis</h4>
+            <div id="error-details">
+              <div class="loading">Loading error details...</div>
+            </div>
+          </div>
+
+          <div id="metrics-tab" class="tab-pane">
+            <h4>Prometheus Metrics</h4>
+            <div class="actions">
+              <button class="btn" onclick="loadMetrics()">
+                Refresh Metrics
+              </button>
+              <button class="btn" onclick="downloadMetrics()">Download</button>
+            </div>
+            <pre
+              id="metrics-content"
+              style="
+                background: var(--bg-tertiary);
+                color: var(--text-primary);
+                padding: 1rem;
+                border-radius: 4px;
+                overflow-x: auto;
+                border: 1px solid var(--border-color);
+                transition: background-color var(--transition-speed), color var(--transition-speed);
+              "
+            >
+                        <div class="loading">Loading metrics...</div>
+                    </pre>
+          </div>
+
+          <div id="actions-tab" class="tab-pane">
+            <h4>Admin Actions</h4>
+            <div class="actions">
+              <h5>Log Management</h5>
+              <button class="btn btn-warning" onclick="clearLogs('all')">
+                Clear All Logs
+              </button>
+              <button class="btn btn-warning" onclick="clearLogs('error')">
+                Clear Error Logs
+              </button>
+
+              <h5 style="margin-top: 1rem">Log Level</h5>
+              <select id="new-log-level">
+                <option value="error">Error</option>
+                <option value="warn">Warning</option>
+                <option value="info">Info</option>
+                <option value="debug">Debug</option>
+              </select>
+              <button class="btn" onclick="updateLogLevel()">
+                Update Log Level
+              </button>
+
+              <h5 style="margin-top: 1rem">Testing</h5>
+              <button
+                class="btn btn-danger"
+                onclick="sendTestAlert('error', 'critical')"
+              >
+                Send Critical Alert
+              </button>
+              <button
+                class="btn btn-warning"
+                onclick="sendTestAlert('error', 'medium')"
+              >
+                Send Medium Alert
+              </button>
+            </div>
+            <div id="action-results"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customization Panel -->
+    <div class="customization-panel" id="customization-panel">
+      <h3><i class="fas fa-paint-brush" aria-hidden="true"></i> Customize Theme</h3>
+      <div class="color-groups">
+        <!-- Color inputs populated by JavaScript -->
+      </div>
+      <div class="button-group">
+        <button class="save-btn" id="save-custom-theme" aria-label="Save custom theme">
+          <i class="fas fa-save" aria-hidden="true"></i> Save
+        </button>
+        <button class="reset-btn" id="reset-custom-theme" aria-label="Reset to defaults">
+          <i class="fas fa-undo" aria-hidden="true"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <script src="../theme-manager.js"></script>
+    <script src="../js/dashboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather API - Admin Login</title>
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../themes.css">
+    <link rel="stylesheet" href="../css/login.css" />
+  </head>
+
+  <body>
+    <div class="login-container">
+      <div class="login-header">
+        <div class="theme-controls">
+          <div class="theme-selector" id="theme-selector-container">
+            <i class="fas fa-palette" aria-hidden="true"></i>
+            <select id="theme-selector" aria-label="Select theme">
+              <!-- Options populated by JavaScript -->
+            </select>
+          </div>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+            <span class="toggle-icon moon-icon">🌙</span>
+            <span class="toggle-icon sun-icon">☀️</span>
+          </button>
+          <button class="customize-btn" id="customize-theme-btn" aria-label="Customize theme">
+            <i class="fas fa-sliders-h" aria-hidden="true"></i>
+          </button>
+        </div>
+        <span class="weather-icon">🌦️</span>
+        <h1>Admin Dashboard</h1>
+        <p>Weather API Monitoring System</p>
+      </div>
+
+      <div class="login-form">
+        <div class="demo-credentials">
+          <h4>🔑 Admin Login</h4>
+          <div class="credential-item">
+            <strong>Note:</strong> Use your configured admin credentials
+          </div>
+          <div class="credential-item">
+            <strong>Default setup:</strong> Check server logs for initial
+            credentials
+          </div>
+        </div>
+
+        <div class="error-message" id="error-message">
+          Invalid credentials. Please try again.
+        </div>
+
+        <div class="success-message" id="success-message">
+          Login successful! Redirecting to dashboard...
+        </div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter your username"
+              required
+              autocomplete="username"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              class="password-input"
+              required
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="show"
+              onclick="togglePassword()"
+              title="Toggle password visibility"
+            >
+              <i class="fas fa-eye" id="toggle-icon"></i>
+            </button>
+          </div>
+
+          <button type="submit" class="login-button" id="login-button">
+            <span class="loading-spinner" id="loading-spinner"></span>
+            <span id="button-text">🚀 Access Dashboard</span>
+          </button>
+        </form>
+
+        <div class="features-list">
+          <h4>📊 Dashboard Features</h4>
+          <ul>
+            <li>Real-time system monitoring</li>
+            <li>Performance metrics & analytics</li>
+            <li>Live log viewer with filtering</li>
+            <li>Error tracking & alerting</li>
+            <li>Admin tools & configuration</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="login-footer">
+        <p>🔒 Secure access to Weather API monitoring</p>
+        <p>Version 1.0.0 • <span id="current-time"></span></p>
+      </div>
+    </div>
+
+    <!-- Customization Panel -->
+    <div class="customization-panel" id="customization-panel">
+      <h3><i class="fas fa-paint-brush" aria-hidden="true"></i> Customize Theme</h3>
+      <div class="color-groups">
+        <!-- Color inputs populated by JavaScript -->
+      </div>
+      <div class="button-group">
+        <button class="save-btn" id="save-custom-theme" aria-label="Save custom theme">
+          <i class="fas fa-save" aria-hidden="true"></i> Save
+        </button>
+        <button class="reset-btn" id="reset-custom-theme" aria-label="Reset to defaults">
+          <i class="fas fa-undo" aria-hidden="true"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <script src="../theme-manager.js"></script>
+    <script src="../js/login.js"></script>
+  </body>
+</html>
